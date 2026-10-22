@@ -1,0 +1,779 @@
+
+/* ========================================
+   MY MOVIE LIST — Cine moderno
+   ======================================== */
+
+:root {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #f4f4f9;
+    background: #090b13;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --bg: #090b13;
+    --surface: #111522;
+    --surface-hover: #191f30;
+    --text: #f4f4f9;
+    --muted: #9ca3b7;
+    --primary: #7865ff;
+    --primary-hover: #9385ff;
+    --border: rgba(255, 255, 255, 0.09);
+    --radius: 16px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at top left, rgba(93, 66, 190, 0.12), transparent 35%),
+        var(--bg);
+    color: var(--text);
+}
+
+body,
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
+button,
+input {
+    font-size: inherit;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--primary-hover);
+    outline-offset: 3px;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+.App {
+    min-height: 100vh;
+}
+
+/* ========================================
+   Cabecera y navegación
+   ======================================== */
+
+header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 22px clamp(20px, 5vw, 76px);
+    background: rgba(9, 11, 19, 0.88);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(18px);
+}
+
+header h1 {
+    margin: 0;
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(110deg, #ffffff 25%, #a69aff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+header input {
+    width: min(100%, 340px);
+    margin: 0;
+    padding: 13px 17px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+header input::placeholder {
+    color: var(--muted);
+}
+
+header input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(120, 101, 255, 0.15);
+    outline: none;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+nav a {
+    padding: 10px 15px;
+    color: var(--muted);
+    border-radius: 10px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+nav a:hover {
+    color: white;
+    background: var(--surface-hover);
+}
+
+/* ========================================
+   Contenido principal
+   ======================================== */
+
+.movies_body {
+    width: min(1400px, 100%);
+    margin: 0 auto;
+    padding: 38px clamp(18px, 4vw, 56px) 60px;
+}
+
+main {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px clamp(18px, 4vw, 56px);
+}
+
+h2 {
+    margin: 0 0 28px;
+    padding: 0;
+    color: var(--text);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 750;
+    letter-spacing: -0.7px;
+    border: 0;
+}
+
+h3 {
+    color: var(--text);
+}
+
+/* ========================================
+   Listado de películas
+   ======================================== */
+
+.movies_body ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 25px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.movies_body li {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transition: transform 0.25s ease, border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.movies_body li:hover {
+    transform: translateY(-5px);
+    border-color: rgba(147, 133, 255, 0.45);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.28);
+}
+
+.movies_body li > a {
+    display: block;
+    color: var(--text);
+}
+
+
+.movies_body li h3 {
+    margin: 0;
+    padding: 14px 13px 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    height: 66px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.movies_body li img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* ========================================
+   Estados de las películas
+   ======================================== */
+
+.movie_status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 12px;
+}
+
+.movie_status button {
+    flex: 1 1 auto;
+    padding: 8px 9px;
+    color: var(--muted);
+    background: #202538;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.movie_status button:hover {
+    color: white;
+    background: #303750;
+}
+
+.movie_status button.active {
+    color: white;
+    background: linear-gradient(120deg, #6553e8, #8b5cf6);
+    box-shadow: 0 4px 14px rgba(120, 101, 255, 0.2);
+}
+
+/* ========================================
+   Botones generales
+   ======================================== */
+
+button:not(.movie_status button) {
+    color: white;
+    background: linear-gradient(120deg, #6553e8, #8058e8);
+    border-radius: 10px;
+    font-weight: 650;
+}
+
+button:not(.movie_status button):hover {
+    background: linear-gradient(120deg, #7868f2, #956cf3);
+    transform: translateY(-1px);
+}
+
+.movies_body > button {
+    display: block;
+    margin: 34px auto 0;
+    padding: 13px 24px;
+}
+
+/* ========================================
+   Ficha de película
+   ======================================== */
+
+.movie_details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(900px, calc(100% - 36px));
+    margin: 40px auto;
+    padding: clamp(22px, 4vw, 48px);
+    background: linear-gradient(145deg, #151a2a, #10131e);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
+}
+
+.movie_details h2 {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.movie_details img {
+    width: min(320px, 100%);
+    height: auto;
+    margin-bottom: 26px;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.movie_details p {
+    width: 100%;
+    margin: 0 0 24px;
+    color: #c4c8d6;
+    font-size: 1rem;
+    line-height: 1.85;
+}
+
+/* ========================================
+   Formularios y pie de página
+   ======================================== */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: min(440px, calc(100% - 32px));
+    margin: 30px auto;
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+form input,
+form textarea {
+    width: 100%;
+    margin: 0;
+    padding: 13px 14px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+form button {
+    padding: 13px 18px;
+}
+
+footer {
+    margin-top: 30px;
+    padding: 24px;
+    color: var(--muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+/* ========================================
+   Pantallas pequeñas
+   ======================================== */
+
+@media (max-width: 700px) {
+    header {
+        justify-content: center;
+        padding: 20px 16px;
+    }
+
+    header h1 {
+        width: 100%;
+        text-align: center;
+    }
+
+    header input {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    nav {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .movies_body {
+        padding: 28px 14px 42px;
+    }
+
+    .movies_body ul {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px 12px;
+    }
+
+    .movies_body li h3 {
+        padding: 11px 10px;
+        font-size: 0.88rem;
+    }
+
+    .movie_status {
+        gap: 5px;
+        padding: 9px;
+    }
+
+    .movie_status button {
+        padding: 8px 5px;
+        font-size: 0.7rem;
+    }
+
+    .movie_details {
+        margin: 22px auto;
+        padding: 22px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+
+/* ========================================
+   Ficha cinematográfica de la película
+   ======================================== */
+
+.movie-page {
+    position: relative;
+    isolation: isolate;
+    min-height: calc(100vh - 90px);
+    padding: 55px clamp(18px, 5vw, 76px) 70px;
+    overflow: hidden;
+}
+
+.movie-backdrop {
+    position: absolute;
+    z-index: -2;
+    inset: 0 0 auto;
+    height: 570px;
+    background-position: center 25%;
+    background-size: cover;
+    opacity: 0.24;
+    filter: saturate(0.8);
+}
+
+.movie-page::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(9, 11, 19, 0.35),
+        #090b13 520px
+    );
+    pointer-events: none;
+}
+
+.movie-details-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 330px) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(28px, 5vw, 65px);
+    width: min(1200px, 100%);
+    margin: 0 auto;
+}
+
+.movie-poster img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.movie-no-poster {
+    display: grid;
+    min-height: 300px;
+    place-items: center;
+    padding: 20px;
+    color: var(--muted);
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+}
+
+.movie-info {
+    min-width: 0;
+    padding-top: 8px;
+}
+
+.movie-eyebrow {
+    color: #a69aff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.movie-info > h1 {
+    margin: 12px 0;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    overflow-wrap: anywhere;
+}
+
+.movie-original-title {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.movie-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 22px 0;
+}
+
+.movie-badges > span,
+.genre-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 650;
+}
+
+.movie-rating {
+    color: #ffda79;
+    background: rgba(255, 218, 121, 0.08);
+}
+
+.movie-release.released {
+    color: #91e7ba;
+    background: rgba(63, 185, 123, 0.1);
+}
+
+.movie-release.upcoming {
+    color: #b7aaff;
+    background: rgba(120, 101, 255, 0.13);
+}
+
+.movie-certification {
+    color: #e0e3ef;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.movie-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.movie-metadata > div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.metadata-label {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.movie-metadata strong {
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 650;
+}
+
+.movie-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 22px 0 30px;
+}
+
+.genre-tag {
+    color: #d5ceff;
+    background: rgba(120, 101, 255, 0.1);
+    border-color: rgba(120, 101, 255, 0.25);
+}
+
+.metadata-muted {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.movie-synopsis h2,
+.movie-tracking h2 {
+    margin: 0 0 12px;
+    font-size: 1.25rem;
+    letter-spacing: -0.3px;
+}
+
+.movie-synopsis p {
+    margin: 0;
+    color: #c5c9d7;
+    font-size: 1rem;
+    line-height: 1.85;
+    white-space: pre-line;
+}
+
+.movie-tracking {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.movie-tracking .movie_status {
+    justify-content: flex-start;
+    padding: 0;
+    margin-top: 14px;
+}
+
+.movie-tracking .movie_status button {
+    flex: 0 1 auto;
+    min-width: 95px;
+    padding: 11px 16px;
+    font-size: 0.85rem;
+}
+
+.movie-message {
+    width: min(800px, calc(100% - 36px));
+    margin: 60px auto;
+    padding: 30px;
+    color: var(--muted);
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.movie-error {
+    color: #ffaaaa;
+}
+
+@media (max-width: 760px) {
+    .movie-page {
+        padding: 32px 18px 45px;
+    }
+
+    .movie-details-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
+
+    .movie-poster {
+        width: min(270px, 85%);
+        margin: 0 auto;
+    }
+
+    .movie-info > h1 {
+        font-size: 2.2rem;
+    }
+
+    .movie-metadata {
+        gap: 20px;
+    }
+
+    .movie-tracking .movie_status button {
+        flex: 1 1 auto;
+    }
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    width: 100%;
+    padding-right: 42px;
+}
+
+.clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.clear-search:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Información adicional de las tarjetas */
+.movie-card-info {
+    padding: 0 13px 14px;
+}
+
+.movies_body li .movie-card-info h3 {
+    height: auto;
+    min-height: 2.8em;
+    padding: 0;
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.movie-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.movie-card-rating {
+    color: #ffd166;
+    font-weight: 700;
+}
+
+.movie-card-year {
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .movie-card-info {
+        padding: 0 10px 12px;
+    }
+
+    .movies_body li .movie-card-info h3 {
+        font-size: 0.88rem;
+    }
+
+    .movie-card-meta {
+        font-size: 0.8rem;
+    }
+}
